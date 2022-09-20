@@ -9,7 +9,7 @@ const Trade = () => {
   return (
     <div>
         <Routes>
-            <Route path={"swap"} element={<Swap/>} />
+            <Route path={"/"} element={<Swap/>} />
             <Route path={"spot"} element={<Spot/>} />
             <Route path={"margin"} element={<Margin/>} />
             {/* <Route path={"traditional"} element={<Traditional/>} /> */}

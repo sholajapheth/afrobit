@@ -1,9 +1,24 @@
-import React from "react";
-import google from "../../assets/svgs/google.svg"
-import facebook from "../../assets/svgs/facebook.svg"
-import apple from "../../assets/svgs/apple.svg"
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { loginAction } from "../../store/slices/login";
+import google from "../../assets/svgs/google.svg";
+import facebook from "../../assets/svgs/facebook.svg";
+import apple from "../../assets/svgs/apple.svg";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const data = { email, password };
+    console.log(data);
+    dispatch(loginAction(data));
+    navigate("/");
+  };
   return (
     <div className="flex flex-col items-center">
       <div
@@ -20,13 +35,15 @@ const Login = () => {
               <span>Phone</span>
             </div>
             <div className="text-[14px] w-full">
-              <form className="flex flex-col gap-5">
+              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                 <div className="flex flex-col gap-1">
                   <label htmlFor="email">Your email</label>
                   <input
                     className="bg-[#363636] h-[49px] rounded-xl"
                     type="text"
                     name="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 <div className="flex flex-col gap-1">
@@ -35,6 +52,8 @@ const Login = () => {
                     className="bg-[#363636] h-[49px] rounded-xl"
                     type="password"
                     name="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                   <span className="text-right text-[#F9C65C]">
                     <u>Forgot Password?</u>
