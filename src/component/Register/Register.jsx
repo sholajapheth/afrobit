@@ -1,7 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import eyes from "../../assets/svgs/eyes.svg";
+import { useDispatch } from "react-redux";
+import { get_codeAction } from "../../store/slices/getAuthCode";
 
 const Register = () => {
+  const dispatch = useDispatch();
+  const [method, setMethod] = useState("email");
+  const [contact, setContact] = useState("");
+  const [code, setCode] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [refferid, setRefferid] = useState("");
+
+  const sendCode = (e) => {
+    e.preventDefault();
+   if (contact.length < 10) {
+      alert("Please enter a valid contact number");
+    } else {
+      const data = { contact, method };
+      dispatch(get_codeAction(data));
+    }
+  };
+
   return (
     <div className="flex flex-col items-center  ">
       <div
@@ -11,20 +31,44 @@ const Register = () => {
         <div className="flex flex-col items-center text-[#666666] ">
           <div className="bg-[#211F20] p-6 rounded flex flex-col items-center gap-4 md:w-[70%] lg:w-[40%] w-[90%]">
             <div className="flex gap-6 w-full">
-              <div className="flex flex-col gap-[.5px] items-center">
-                <span className="text-[#FAC55B] ">Email</span>
-                <span className="border-b-[2px]  border-[#FAC55B] w-[25px]"></span>
-              </div>
-              <span>Phone</span>
+              <button
+                onClick={() => setMethod("email")}
+                className={`${
+                  method === "email" && "flex flex-col gap-[.5px] items-center"
+                }`}
+              >
+                <span className={`${method === "email" && "text-[#FAC55B] "} `}>
+                  Email
+                </span>
+                {method === "email" && (
+                  <span className="border-b-[2px]  border-[#FAC55B] w-[25px]"></span>
+                )}
+              </button>
+
+              <button
+                onClick={() => setMethod("phone")}
+                className={`${
+                  method === "phone" && "flex flex-col gap-[.5px] items-center"
+                }`}
+              >
+                <span className={`${method === "phone" && "text-[#FAC55B] "} `}>
+                  Phone
+                </span>
+                {method === "phone" && (
+                  <span className="border-b-[2px]  border-[#FAC55B] w-[25px]"></span>
+                )}
+              </button>
             </div>
             <div className="text-[14px] w-full">
               <form className="flex flex-col gap-5 ">
                 <div className="flex flex-col gap-1">
-                  <label htmlFor="email">Your email</label>
+                  <label htmlFor="email">Your {method} </label>
                   <input
                     className="bg-[#363636] h-[49px] rounded"
-                    type="text"
-                    name="email"
+                    type={method === "email" ? "email" : "number"}
+                    name={method}
+                    value={contact}
+                    onChange={(e) => setContact(e.target.value)}
                   />
                 </div>
                 <div className="flex flex-col gap-1">
@@ -34,8 +78,13 @@ const Register = () => {
                       className="bg-[#363636] h-[49px] rounded w-[82%]"
                       type="text"
                       name="code"
+                      value={code}
+                      onChange={(e) => setCode(e.target.value)}
                     />
-                    <button className="h-[49px] bg-[#363636] w-[18%] rounded">
+                    <button
+                      onClick={(e)=> sendCode(e)}
+                      className="h-[49px] bg-[#363636] w-[18%] rounded"
+                    >
                       Send
                     </button>
                   </div>
@@ -43,11 +92,13 @@ const Register = () => {
 
                 <div className="flex flex-col gap-1 w-full">
                   <label htmlFor="password">Your password</label>
-                  <div className="flex justify-between items-center w-full bg-[#363636] h-[49px]  rounded w-full">
+                  <div className="flex justify-between items-center w-full bg-[#363636] h-[49px]  rounded ">
                     <input
                       className="h-[49px] bg-[#363636] w-full border-none"
                       type="password"
                       name="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                     <i className="relative mr-3">
                       <img src={eyes} alt="eyes" />
@@ -56,11 +107,13 @@ const Register = () => {
                 </div>
                 <div className="flex flex-col gap-1 w-full">
                   <label htmlFor="password">Confirm password</label>
-                  <div className="flex justify-between items-center w-full bg-[#363636] h-[49px]  rounded w-full">
+                  <div className="flex justify-between items-center w-full bg-[#363636] h-[49px]  rounded ">
                     <input
                       className="h-[49px] bg-[#363636] w-full border-none"
                       type="password"
-                      name="password"
+                      name="confirmpassword"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                     <i className="relative mr-3 ">
                       <img src={eyes} alt="eyes" />
@@ -74,6 +127,8 @@ const Register = () => {
                     className="bg-[#363636] h-[49px] rounded"
                     type="text"
                     name="referrer"
+                    value={refferid}
+                    onChange={(e) => setRefferid(e.target.value)}
                   />
                 </div>
 
