@@ -4,7 +4,6 @@ import eyes from "../../assets/svgs/eyes.svg";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { registerAction } from "../../store/slices/register";
-// import { useMemo } from "react";
 
 const Register = () => {
   // const navigate = useNavigate();
