@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import eyes from "../../assets/svgs/eyes.svg";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { get_codeAction } from "../../store/slices/getAuthCode";
+import axios from "axios";
+import { registerAction } from "../../store/slices/register";
+import { useMemo } from "react";
 
 const Register = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [method, setMethod] = useState("email");
   const [contact, setContact] = useState("");
@@ -11,14 +15,78 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [refferid, setRefferid] = useState("");
+  const [type_1, setType_1] = useState(true);
+  const [type_2, setType_2] = useState(true);
+  const check_1 = useRef();
+  let errorList = useState([]);
 
   const sendCode = (e) => {
     e.preventDefault();
-   if (contact.length < 10) {
-      alert("Please enter a valid contact number");
-    } else {
-      const data = { contact, method };
-      dispatch(get_codeAction(data));
+    axios({
+      method: "post",
+      baseURL: "https://afrobit-api.herokuapp.com/api/auth",
+      url:
+        method === "email"
+          ? "send-code-verify-email"
+          : "send-code-verify-phone",
+      data: {
+        email: contact,
+      },
+    }).then(function (res) {
+      if (res.request.status === 200) {
+        alert("Code sent successfully");
+      } else {
+        alert("Code not sent");
+      }
+    });
+  };
+
+  const register = (e) => {
+    e.preventDefault();
+    if (code === "") {
+      alert("Please enter code");
+    }
+    if (!check_1.current.checked) alert("Please accept terms and conditions");
+    console.log(errorList);
+    if (password < 6 && confirmPassword < 6) {
+      alert("Password must be at least 6 characters");
+    }
+    if (password !== confirmPassword) {
+      alert("Password does not match");
+    }
+    if (contact === "") {
+      alert(`${method} is required`);
+    }
+
+    if (
+      password === confirmPassword &&
+      password.length >= 6 &&
+      contact !== "" &&
+      code !== "" &&
+      check_1.current.checked
+    ) {
+      if (method === "email") {
+        const data = {
+          method: method,
+          email: contact,
+          code: code,
+          password: password,
+          confirm_password: confirmPassword,
+          refferid: refferid,
+        };
+        dispatch(registerAction(data));
+      } else {
+        const data = {
+          method: method,
+          phone: contact,
+          code: code,
+          password: password,
+          confirm_password: confirmPassword,
+          refferid: refferid,
+        };
+        dispatch(registerAction(data));
+      }
+     
     }
   };
 
@@ -29,7 +97,7 @@ const Register = () => {
       py-[2.2rem]"
       >
         <div className="flex flex-col items-center text-[#666666] ">
-          <div className="bg-[#211F20] p-6 rounded flex flex-col items-center gap-4 md:w-[70%] lg:w-[40%] w-[90%]">
+          <div className="bg-[#211F20] p-6 rounded flex flex-col items-center gap-4 md:w-[70%] lg:w-[40%] w-[96%]">
             <div className="flex gap-6 w-full">
               <button
                 onClick={() => setMethod("email")}
@@ -59,6 +127,7 @@ const Register = () => {
                 )}
               </button>
             </div>
+
             <div className="text-[14px] w-full">
               <form className="flex flex-col gap-5 ">
                 <div className="flex flex-col gap-1">
@@ -82,7 +151,7 @@ const Register = () => {
                       onChange={(e) => setCode(e.target.value)}
                     />
                     <button
-                      onClick={(e)=> sendCode(e)}
+                      onClick={(e) => sendCode(e)}
                       className="h-[49px] bg-[#363636] w-[18%] rounded"
                     >
                       Send
@@ -95,29 +164,50 @@ const Register = () => {
                   <div className="flex justify-between items-center w-full bg-[#363636] h-[49px]  rounded ">
                     <input
                       className="h-[49px] bg-[#363636] w-full border-none"
-                      type="password"
+                      type={type_1 ? "password" : "text"}
                       name="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                     />
-                    <i className="relative mr-3">
-                      <img src={eyes} alt="eyes" />
-                    </i>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setType_1(!type_1);
+                      }}
+                      className="relative mr-3"
+                    >
+                      <img
+                        className={`${type_1 ? "" : "rotate-180"}`}
+                        src={eyes}
+                        alt="eyes"
+                      />
+                    </button>
                   </div>
                 </div>
+
                 <div className="flex flex-col gap-1 w-full">
                   <label htmlFor="password">Confirm password</label>
                   <div className="flex justify-between items-center w-full bg-[#363636] h-[49px]  rounded ">
                     <input
                       className="h-[49px] bg-[#363636] w-full border-none"
-                      type="password"
+                      type={type_2 ? "password" : "text"}
                       name="confirmpassword"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                     />
-                    <i className="relative mr-3 ">
-                      <img src={eyes} alt="eyes" />
-                    </i>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setType_2(!type_2);
+                      }}
+                      className="relative mr-3"
+                    >
+                      <img
+                        className={`${type_2 ? "" : "rotate-180"}`}
+                        src={eyes}
+                        alt="eyes"
+                      />
+                    </button>
                   </div>
                 </div>
 
@@ -135,6 +225,7 @@ const Register = () => {
                 <button
                   className="bg-gradient-to-r from-[#EDD78F] via-[#EDD78F] to-[#FDBF4A] text-black py-[10px] rounded-md font-[600] text-[16px] w-full"
                   type="submit"
+                  onClick={(e) => register(e)}
                 >
                   Register
                 </button>
@@ -145,6 +236,7 @@ const Register = () => {
                 <input
                   className="bg-red-100 text-black focus:black border-[#EDD78F] mt-1"
                   type="checkbox"
+                  ref={check_1}
                 />
                 <p>
                   I have read, understood, and agree to be bound by the
@@ -157,6 +249,7 @@ const Register = () => {
                 <input
                   className="bg-red-100 text-black focus:black border-[#EDD78F] mt-1"
                   type="checkbox"
+                  ref={check_1}
                 />
                 <p>
                   I acknowledge that I have read and understood the{" "}

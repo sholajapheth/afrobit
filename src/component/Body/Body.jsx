@@ -13,29 +13,31 @@ import { useSelector } from "react-redux";
 const Body = () => {
   return (
     <div className="bg-[#363636]  h-auto">
-      {useSelector((state) => state.login.loggedIn) ? (
-        <Routes>
-          <Route path="/*" element={<Trade />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="refferal" element={<Refferal />} />
-          <Route path="earn" element={<Earn />} />
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route path="invest" element={<Invest />} />
-          <Route path="assets" element={<Assets />} />s
-        </Routes>
+      <Routes>
+        <Route path="/*" element={<Trade />} />
+        <Route path="settings" element={<Settings />} />
+        <Route path="refferal" element={<Refferal />} />
+        <Route path="earn" element={<Earn />} />
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
+        <Route path="invest" element={<Invest />} />
+        <Route path="assets" element={<Assets />} />
+      <Route path="login" element={<Login />} />
+      </Routes>
+      {/* {useSelector((state) => state.login.loggedIn) ? (
+     
       ) : (
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/*" element={<Trade />} />
+          <Route path="login" element={<Login />} />
           <Route path="refferal" element={<Refferal />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="earn" element={<Earn />} />
           <Route path="invest" element={<Invest />} />
           <Route path="assets" element={<Assets />} />
-          <Route path="trade/*" element={<Trade />} />
         </Routes>
-      )}
+      )} */}
     </div>
   );
 };

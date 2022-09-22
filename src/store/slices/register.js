@@ -14,7 +14,8 @@ const register = createSlice({
             state.loading = false;
             state.loggedIn = true;
             alert("Registeration Successful");
-            localStorage.setItem("token", action.payload.data);
+            localStorage.setItem("token", action.payload);
+
         },
         registerRequestFailed: (state) => {
             state.loading = false;

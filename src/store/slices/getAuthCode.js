@@ -27,14 +27,19 @@ const {
   get_auth_codeRequestFailed,
 } = get_auth_code.actions;
 
-export const get_codeAction = (data, method) =>
+export const get_codeAction = (data, authMethod) =>
   apiCallBegan({
     onStart: get_auth_codeRequested.type,
     onSuccess: get_auth_codeReceived.type,
     onError: get_auth_codeRequestFailed.type,
-    data,
-    url:  method !== "email" ? "/auth/send-code-verify-email" : "/auth/send-code-verify-phone",
+    data: "sholajapheth@gmail.com",
+    url:"/auth/send-code-verify-email",
     method: "POST",
+    // url:
+    //   authMethod === "email"
+    //     ? "/auth/send-code-verify-email"
+    //     : "/auth/send-code-verify-phone",
+    // method: "POST",
   });
 
 

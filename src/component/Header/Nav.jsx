@@ -34,7 +34,7 @@ const Nav = () => {
         </button>
         {active === "trade" && display && (
           <div className="py-8 rounded bg-[#2C2C2C] absolute top-[5rem] flex flex-col gap-8">
-            <NavLink to={"trade/swap"}>
+            <NavLink to={"/"}>
               <button
                 onClick={() =>{
                   setDisplay(false)
@@ -50,7 +50,7 @@ const Nav = () => {
                 </div>
               </button>
             </NavLink>
-            <NavLink to={"trade/spot"}>
+            <NavLink to={"/spot"}>
               <button
                 onClick={() => setDisplay(false)}
                 className="px-8 flex gap-4 items-center hover:bg-[#211F20] text-left w-full"
@@ -64,7 +64,7 @@ const Nav = () => {
                 </div>
               </button>
             </NavLink>
-            <NavLink to={"trade/margin"}>
+            <NavLink to={"/margin"}>
               <button
                 onClick={() => setDisplay(false)}
                 className="px-8 flex gap-4 items-center hover:bg-[#211F20] text-left w-full"

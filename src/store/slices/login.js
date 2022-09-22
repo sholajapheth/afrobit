@@ -19,7 +19,7 @@ const login = createSlice({
       state.loading = false;
       state.loggedIn = true;
       alert("Login Successful");
-      localStorage.setItem("token", action.payload.data);
+      localStorage.setItem("token", action.payload);
     },
     loginRequestFailed: (state, action) => {
       state.loading = false;
