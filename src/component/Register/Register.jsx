@@ -1,13 +1,13 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import eyes from "../../assets/svgs/eyes.svg";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { registerAction } from "../../store/slices/register";
-import { useMemo } from "react";
+// import { useMemo } from "react";
 
 const Register = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const [method, setMethod] = useState("email");
   const [contact, setContact] = useState("");
