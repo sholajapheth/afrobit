@@ -5,9 +5,11 @@ import Body from "./component/Body/Body";
 import Footer from "./component/Footer/Footer";
 
 function App() {
+  const login = useSelector((state) => state.login.loading);
+  const swapHistory = useSelector((state) => state.swap_history.loading);
   return (
     <div className="">
-      {useSelector((state) => state.login.loading) ? (
+      {login || swapHistory ? (
         <div className="flex flex-col items-center pt-[10em] w-full bg-slate-600 h-screen">
           <MutatingDots
             height="100"

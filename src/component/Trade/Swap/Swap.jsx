@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { useTable } from "react-table";
+import axios from "axios";
 import check from "../../../assets/svgs/check.svg";
 import coinswap from "../../../assets/svgs/coinswap.svg";
 import exchange from "../../../assets/svgs/exchange.svg";
 import greenDolls from "../../../assets/svgs/greenDolls.svg";
 import btc from "../../../assets/svgs/btc.svg";
 import drop from "../../../assets/svgs/drop.svg";
+import { useSelector } from "react-redux";
 
 const Check = (props) => (
   <div className="flex gap-2">
@@ -79,107 +80,138 @@ const Payment = (props) => (
   </div>
 );
 
+const TableData = (props) => {
+  return (
+    <td className="md:p-5 md:px-8 p-2 px-2  text-white text-[14px]">
+      {props.children}
+    </td>
+  );
+};
+
 const SwapHistory = () => {
-  const data = React.useMemo(
-    () => [
-      {
-        col1: "07/31/2022 09:03:13",
-        col2: (
-          <span className="text-[#EDD78F] flex gap-1 items-center">
-            <span>USDⓢ </span>
-            <img className="max-w-[12px]" src={exchange} alt="" />{" "}
-            <span>BTC</span>
-          </span>
-        ),
-        col3: "500 USDⓢ",
-        col4: "0.021009 BTC",
-        col5: "1 USDⓢ = 0.00004201 BTC	",
-        col6: (
-          <span className="p-3 rounded-full bg-[#02c8a81a] text-[#02C8A8] ">
-            Completed
-          </span>
-        ),
-      },
-    ],
-    []
-  );
+  const [swap_history, setSwap_history] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const login = useSelector((state) => state.login.loggedIn);
 
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: "Time",
-        accessor: "col1", // accessor is the "key" in the data
-      },
-      {
-        Header: "Pair",
-        accessor: "col2",
-      },
-      {
-        Header: "Send",
-        accessor: "col3",
-      },
-      {
-        Header: "Get",
-        accessor: "col4",
-      },
-      {
-        Header: "Rate",
-        accessor: "col5",
-      },
-      {
-        Header: "Status",
-        accessor: "col6",
-      },
-    ],
-    []
-  );
+  const handle_swap_history = async () => {
+    if (login) {
+      try {
+        let auth = JSON.parse(localStorage.getItem("token"));
+        auth = auth.access_token;
+        setLoading(true);
+        const response = await axios.request({
+          method: "GET",
+          baseURL: "https://afrobit-api.herokuapp.com/api/",
+          url: "/swap",
+          headers: {
+            "content-type": "application/json",
+            Authorization: "Bearer " + auth,
+          },
+        });
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data });
+        console.log("sh: ", response.data);
+        setLoading(false);
+        setSwap_history(response.data.items);
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+      }
+    } else alert("Please Login to view Swap history");
+  };
 
   return (
     <div className="flex flex-col bg-[#161616] md:p-[5rem] p-[1rem] md:text-[18px] text-[14px] text-black md:h-screen  md:overflow-auto overflow-y-scroll ">
-      <table {...getTableProps()} className="w-full ">
+      <table className="w-full ">
         <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()} className="p-5 ">
+          <tr className="p-5 ">
+            <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+              Time
+            </th>
+            <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+              Pair
+            </th>
+            <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+              Send
+            </th>
+            <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+              Get
+            </th>
+            <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+              Rate
+            </th>
+            <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+              Status
+            </th>
+          </tr>
+          {/* {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
                 <th
                   {...column.getHeaderProps()}
-                  className="text-left text-[#666666] bg-[#242424] md:p-5 md:px-8 p-2 px-2 "
                 >
                   {column.render("Header")}
                 </th>
               ))}
             </tr>
-          ))}
+          ))} */}
         </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td
-                      {...cell.getCellProps()}
-                      className="md:p-5 md:px-8 p-2 px-2  text-white"
-                    >
-                      {cell.render("Cell")}
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
+        {loading ? (
+          <div>Geting History....</div>
+        ) : (
+          <tbody>
+            {swap_history !== null &&
+              swap_history.map((item) => {
+                const date1 = new Date(item.created_at);
+                const date = date1.toLocaleString();
+
+                return (
+                  <tr>
+                    <TableData>{date}</TableData>
+                    <TableData>
+                      <span className="text-[#EDD78F] flex gap-1 items-center">
+                        <span>{item.from_currency} </span>
+                        <img
+                          className="max-w-[12px]"
+                          src={exchange}
+                          alt=""
+                        />{" "}
+                        <span>{item.to_currency}</span>
+                      </span>
+                    </TableData>
+                    <TableData>{item.amount_sent}</TableData>
+                    <TableData>{item.amount_get}</TableData>
+                    <TableData>{item.rate} USDⓢ = 0.00004201 BTC </TableData>
+                    <TableData>
+                      <span
+                        className={`p-3 rounded-full ${
+                          item.status === "COMPLETED"
+                            ? "bg-[#02c8a81a]  text-[#02C8A8]"
+                            : "bg-red-500 text-red-300"
+                        } `}
+                      >
+                        {item.status === "COMPLETED" ? "Completed" : "Pending"}
+                      </span>
+                    </TableData>
+                  </tr>
+                );
+              })}
+          </tbody>
+        )}
       </table>
+
+      <div className="flex items-center flex-col w-full py-[2em]">
+        <button
+          className="border py-[10px]  w-full text-white"
+          onClick={handle_swap_history}
+        >
+          Get Swap History
+        </button>
+      </div>
     </div>
   );
 };
 
 const ReconfirmOrder = (props) => {
-  
   return (
     <div className="m-auto items-center bg-[#222222] md:w-[60%] w-[90%] p-10 my-[20rem] ">
       <div className="flex flex-col gap-[2rem]">

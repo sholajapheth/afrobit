@@ -1,9 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { apiCallBegan } from "../apiActions";
 
-
-
-
 const login = createSlice({
   name: "login",
   initialState: {
@@ -18,8 +15,9 @@ const login = createSlice({
     loginReceived: (state, action) => {
       state.loading = false;
       state.loggedIn = true;
+      localStorage.setItem("token", JSON.stringify(action.payload));
+      console.log(action.payload);
       alert("Login Successful");
-      localStorage.setItem("token", action.payload);
     },
     loginRequestFailed: (state, action) => {
       state.loading = false;
@@ -35,21 +33,21 @@ const login = createSlice({
   },
 });
 
+const { loginRequested, loginReceived, loginRequestFailed, logout } =
+  login.actions;
 
-const { loginRequested, loginReceived, loginRequestFailed, logout } = login.actions;
-
-export const loginAction = (data) => apiCallBegan({
+export const loginAction = (data) =>
+  apiCallBegan({
     onStart: loginRequested.type,
     onSuccess: loginReceived.type,
     onError: loginRequestFailed.type,
     data,
     url: "/auth/login",
     method: "POST",
-})
+  });
 
 export const logoutAction = () => {
-    return logout();
-}
+  return logout();
+};
 
 export default login.reducer;
-

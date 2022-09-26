@@ -6,8 +6,10 @@ const api =
   (next) =>
   async (action) => {
     if (action.type !== actions.apiCallBegan.type) return next(action);
-    const { url, data, onSuccess, onError, onStart, method, extraheaders } =
+    const { url, data, onSuccess, onError, onStart, method, auth } =
       action.payload;
+
+    console.log(auth);
 
     if (onStart) dispatch({ type: onStart });
 
@@ -23,7 +25,7 @@ const api =
           "content-type": "application/json",
           // "Access-Control-Allow-Origin": "*",
           // "Access-Control-Allow-Headers": "*",
-          // Authorization: "Bearer " + extraheaders,
+          Authorization: "Bearer " + auth,
         },
       });
 
