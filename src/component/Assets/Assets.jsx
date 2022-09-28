@@ -43,8 +43,12 @@ const AssetsNavButton = ({
       onClick={handleClick}
       className={`${active && "text-white"} flex items-center gap-3`}
     >
-      <img className="w-[2rem]" src={active ? wallet : wallet2} alt={name} />
-      <p>{name}</p>
+      <img
+        className="min-w-[2em] w-[2em] "
+        src={active ? wallet : wallet2}
+        alt={name}
+      />
+      <p className="md-inline hidden ">{name}</p>
     </button>
   );
 };
@@ -288,11 +292,10 @@ const Commision3 = () => {
     []
   );
 
-  const { getTableProps, headerGroups } =
-    useTable({ columns, data });
+  const { getTableProps, headerGroups } = useTable({ columns, data });
 
   return (
-    <div className=" text-white my-[4rem]">
+    <div className=" text-white my-[4rem] text-[12px]">
       <p className="font-[700] mb-[.5rem]">Deposit History</p>
       <hr />
       <div className="flex gap-4  text-[#707070] mt-[1rem]">
@@ -311,10 +314,14 @@ const Commision3 = () => {
           <img src={to} alt="" />
           <span>End Date</span>
         </button>
-        <button className=" bg-[#363636] flex items-center gap-8 px-[.3rem] border border-[#707070] py-[.3rem] rounded">
-          <span>Select Currency</span>
-          <img src={drop} alt="" />
-        </button>
+
+        <select
+          name=""
+          id=""
+          className=" bg-[#363636] border border-[#707070]  rounded"
+        >
+          <option value="">All</option>
+        </select>
       </div>
       <div className="mt-[2rem]">
         <table {...getTableProps()} className="w-full ">
@@ -412,8 +419,7 @@ const Commision4 = () => {
     []
   );
 
-  const { getTableProps, headerGroups } =
-    useTable({ columns, data });
+  const { getTableProps, headerGroups } = useTable({ columns, data });
 
   return (
     <div className=" text-white my-[4rem]">
@@ -456,25 +462,6 @@ const Commision4 = () => {
               </tr>
             ))}
           </thead>
-          {/* <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td
-                        {...cell.getCellProps()}
-                        className="md:p-4 md:px-8 p-2 px-2  text-white"
-                      >
-                        {cell.render("Cell")}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody> */}
         </table>
       </div>
     </div>
@@ -483,15 +470,19 @@ const Commision4 = () => {
 
 const Wallet = () => {
   return (
-    <div className="flex flex-col gap-[2rem]">
+    <div className="flex flex-col gap-[2rem]  ">
       <div className="flex gap-[8rem]">
         <div>
           <p className="text-[#858585] text-[12px]">Net assets (USD)</p>
-          <p className="font-[500] text-[28px]">≈ 2,095,172.54</p>
+          <p className="font-[500] text-[20px] md:text-[28px]">
+            ≈ 2,095,172.54
+          </p>
         </div>
         <div>
           <p className="text-[#858585] text-[12px]">Available (USD)</p>
-          <p className="font-[500] text-[28px]">≈ 2,095,172.54</p>
+          <p className="font-[500] text-[20px] md:text-[28px]">
+            ≈ 2,095,172.54
+          </p>
         </div>
       </div>
       <div className="flex gap-[2rem] text-[14px] ">
@@ -505,16 +496,18 @@ const Wallet = () => {
         <span className="text-[#7C7C7C]">Dual Currency Position</span>
       </div>
       <div className="flex flex-col gap-6">
-        <div className="flex justify-between items-end">
+        <div className="flex md:flex-row flex-col md:justify-between md:items-end">
           <div>
             <p className="text-[#858585] text-[12px]">Available (USD)</p>
-            <p className="font-[500] text-[28px]">≈ 2,095,172.54</p>
+            <p className="font-[500] text-[20px] md:text-[28px]">
+              ≈ 2,095,172.54
+            </p>
           </div>
           <div className="flex gap-[1rem]">
-            <button className="rounded border border-[#EDD78F] text-[#EDD78F] px-[1.5rem] py-[.5rem]">
+            <button className="rounded border border-[#EDD78F] text-[#EDD78F] py-[.5rem]  px-[.5rem]">
               Balance Details
             </button>
-            <button className="rounded text-black bg-[#EDD78F] font-[500] px-[1.5rem] py-[.5rem]">
+            <button className="rounded text-black bg-[#EDD78F] font-[500]  py-[.5rem] px-[.5rem]">
               Balance Details
             </button>
           </div>
@@ -522,12 +515,10 @@ const Wallet = () => {
         <hr />
         <div className="flex justify-between">
           <div className="rounded bg-[#2C2C2C] flex -tems-center px-[10px]">
-            <input
-              className="w-[8rem] bg-[#2C2C2C] border-none"
-              type="text"
-              placeholder="All"
-            />
-            <img src={drop} alt="" />
+            <select className="rounded bg-[#2C2C2C] " name="" id="">
+              <option value="">All</option>
+              <option value="">BTC</option>
+            </select>
           </div>
           <div className="flex gap-1 items-center">
             <p>Hide Balance</p>
@@ -540,6 +531,7 @@ const Wallet = () => {
     </div>
   );
 };
+
 const Deposit = () => {
   return (
     <div className="w-full">
@@ -555,32 +547,41 @@ const Deposit = () => {
           </div>
           <div>
             <label htmlFor="currency">Select Currency</label>
-            <div className="flex  justify-between items-center bg-[#363636] rounded px-[5px] ">
-              <div className="flex gap-1 items-center">
-                <img src={btc} alt="" /> <span>BTC</span>
-              </div>
-              <input type="text" className="bg-[#363636] border-none" />
-              <img src={drop} alt="" />
+            <div>
+              <select
+                className="w-full rounded bg-[#2C2C2C] "
+                name="currency"
+                id=""
+              >
+                <option value="">BTC</option>
+                <option value="">ETH</option>
+                <option value="">USDT</option>
+                <option value="">USDC</option>
+              </select>
             </div>
           </div>
           <div>
             <label htmlFor="currency">Protocol</label>
-            <div className="flex  justify-between items-center bg-[#363636] rounded px-[5px] ">
-              <span>BTC</span>
-
-              <input type="text" className="bg-[#363636] border-none" />
-              <img src={drop} alt="" />
+            <div>
+              <select
+                className="w-full rounded bg-[#2C2C2C] "
+                name="currency"
+                id=""
+              >
+                <option value="">BTC</option>
+                <option value="">ETH</option>
+                <option value="">USDT</option>
+                <option value="">USDC</option>
+              </select>
             </div>
           </div>
+
           <div>
             <label htmlFor="currency">Address</label>
-            <div className="flex justify-between items-center bg-[#363636] rounded px-[5px] ">
-              <input
-                placeholder="1KZmoXHWmhuaY17Gj9CLxQaXBDnAyzsGrw"
-                disabled
-                type="text"
-                className="bg-[#363636] border-none"
-              />
+            <div className="flex md:flex-row flex-col md: justify-between items-center gap-2 ">
+              <p className="bg-[#363636] border-none text-[12px]">
+                1KZmoXHWmhuaY17Gj9CLxQaXBDnAyzsGrw
+              </p>
               <div className="flex items-center gap-2">
                 <img src={barcode} alt="" />
                 <img src={copy} alt="" />
@@ -618,6 +619,7 @@ const Deposit = () => {
     </div>
   );
 };
+
 const Widthdraw = () => {
   return (
     <div className="w-full">
@@ -649,13 +651,14 @@ const Widthdraw = () => {
               <img src={drop} alt="" />
             </div>
           </div>
+
           <div>
             <label htmlFor="currency">Address</label>
             <div className="flex gap-2 items-center  ">
               <input
                 placeholder="Enter withdraw address"
                 type="text"
-                className="bg-[#363636] border-none bg-[#363636] rounded px-[5px]  w-[70%]"
+                className="bg-[#363636] border-none rounded px-[5px]  w-[70%]"
               />
               <button className="w-[30%] px-[1.5rem] py-[.5rem] rounded bg-[#EDD78F] text-black font-[600]">
                 Select Address
@@ -667,7 +670,7 @@ const Widthdraw = () => {
             <input
               placeholder="Add note (E.g wallets, exchange etc)"
               type="text"
-              className="bg-[#363636] border-none bg-[#363636] rounded px-[5px]  "
+              className="bg-[#363636] border-none rounded px-[5px]  "
             />
           </div>
           <div>
@@ -725,9 +728,10 @@ const Widthdraw = () => {
     </div>
   );
 };
+
 const AssetsNav = ({ setAssetState, setComponent, assetState }) => {
   return (
-    <div className="flex px-[3rem] py-[4rem]  ">
+    <div className="flex md:px-[3rem] px-[1rem] py-[4rem]  ">
       <div className="text-[#A7A7A7] font-[500] flex flex-col gap-[2rem] ">
         <AssetsNavButton
           setComponent={setComponent}
@@ -757,14 +761,14 @@ const AssetsNav = ({ setAssetState, setComponent, assetState }) => {
 
 const Displayarea = (props) => {
   return (
-    <div className="px-[3rem] py-[2rem] w-full border-l">
+    <div className="md:px-[3rem] px-[1em] py-[2rem] w-full border-l overflow-x-scroll ">
       <div className="text-white flex flex-col gap-5">
         <div
           className={`${
             props.assetState !== "Wallet" && "hidden"
           } flex items-center justify-between`}
         >
-          <p className="font-[400] text-[32px] font-[400]">Assets</p>
+          <p className="font-[400] md:text-[32px] text-[20px]">Assets</p>
           <div className="flex gap-1">
             <p className="text-[#EDD78F] text-[12px]">Details</p>
             <img src={goldArrow} alt="" />
