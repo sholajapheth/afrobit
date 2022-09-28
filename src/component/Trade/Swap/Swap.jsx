@@ -3,7 +3,7 @@ import axios from "axios";
 import check from "../../../assets/svgs/check.svg";
 import coinswap from "../../../assets/svgs/coinswap.svg";
 import exchange from "../../../assets/svgs/exchange.svg";
-import greenDolls from "../../../assets/svgs/greenDolls.svg";
+// import greenDolls from "../../../assets/svgs/greenDolls.svg";
 import btc from "../../../assets/svgs/btc.svg";
 import eth from "../../../assets/images/eth.png";
 import usdt from "../../../assets/images/usdt.png";
@@ -34,9 +34,7 @@ const Banner = () => (
 );
 
 const Payment = (props) => {
-  const [send, setSend] = useState({ name: "USDⓢ", value: "usdt", img: usdt });
-  const [get, setGet] = useState({ name: "USDⓢ", value: "usdt", img: usdt });
-
+ 
   const data = [
     { name: "USDⓢ", value: "usdt", img: usdt },
     { name: "BTC", value: "btc", img: btc },

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import logo from "../../assets/svgs/logo.svg";
 import afrobit_logo from "../../assets/images/afrobit_logo.png";
 import LoginRegister from "./LoginRegister";
 import { GiHamburgerMenu } from "react-icons/gi";

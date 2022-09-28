@@ -1,8 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { useNavigate } from "react-router-dom";
 import { apiCallBegan } from "../apiActions";
-
-const navigate = useNavigate;
 
 const swaphistory = createSlice({
   name: "swap_history",
