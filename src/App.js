@@ -6,10 +6,11 @@ import Footer from "./component/Footer/Footer";
 
 function App() {
   const login = useSelector((state) => state.login.loading);
+  const register = useSelector((state) => state.register.loading);
   const swapHistory = useSelector((state) => state.swap_history.loading);
   return (
     <div className="">
-      {login || swapHistory ? (
+      {login || swapHistory || register ? (
         <div className="flex flex-col items-center pt-[10em] w-full bg-slate-600 h-screen">
           <MutatingDots
             height="100"

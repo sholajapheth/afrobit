@@ -5,7 +5,9 @@ import coinswap from "../../../assets/svgs/coinswap.svg";
 import exchange from "../../../assets/svgs/exchange.svg";
 import greenDolls from "../../../assets/svgs/greenDolls.svg";
 import btc from "../../../assets/svgs/btc.svg";
-import drop from "../../../assets/svgs/drop.svg";
+import eth from "../../../assets/images/eth.png";
+import usdt from "../../../assets/images/usdt.png";
+import bnb from "../../../assets/images/bnb.png";
 import { useSelector } from "react-redux";
 
 const Check = (props) => (
@@ -31,54 +33,86 @@ const Banner = () => (
   </div>
 );
 
-const Payment = (props) => (
-  <div className="flex flex-col  items-center bg-[#211F20] py-[5rem] text-[18px] ">
-    <div className="lg:w-[45%] md:w-[70%] w-[90%] flex flex-col gap-6 ">
-      <div className="flex flex-col gap-2 ">
+const Payment = (props) => {
+  const [send, setSend] = useState({ name: "USDⓢ", value: "usdt", img: usdt });
+  const [get, setGet] = useState({ name: "USDⓢ", value: "usdt", img: usdt });
+
+  const data = [
+    { name: "USDⓢ", value: "usdt", img: usdt },
+    { name: "BTC", value: "btc", img: btc },
+    { name: "ETH", value: "eth", img: eth },
+    { name: "BNB", value: "bnb", img: bnb },
+  ];
+
+  return (
+    <div className="flex flex-col  items-center bg-[#211F20] py-[5rem] text-[18px] ">
+      <div className="lg:w-[45%] md:w-[70%] w-[90%] flex flex-col gap-6 ">
+        <div className="flex flex-col gap-2 ">
+          <div className="bg-[#2C2C2C] p-6 w-full rounded">
+            <div className="flex flex-col gap-6 ">
+              <span>Send</span>
+              <div className="flex  items-center text-14 w-full">
+                <div className="text-black font-[600]">
+                  <select name="coins" className="bg-transparent border-none ">
+                    <option value="USD">USDⓢ</option>
+                    <option value="BNB">BNB</option>
+                    <option value="USDT">USDT</option>
+                    <option value="TRC">TRC</option>
+                  </select>
+                </div>
+
+                <div className="flex items-center gap-2 w-full">
+                  <input
+                    type="number"
+                    className="bg-transparent border w-full "
+                  />
+                  <span className="text-[14px]">All</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="text-[14px]">
+            <span>Available</span> <span className="text-[#FAC55A]">0USDⓢ</span>
+          </div>
+        </div>
+        <hr className="border-[#3C3C3C]" />
         <div className="bg-[#2C2C2C] p-6 w-full rounded">
           <div className="flex flex-col gap-6 ">
-            <span>Send</span>
-            <div className="flex justify-between">
-              <div className="flex gap-5 pr-5 border-r border-[#3C3C3C]">
-                <img src={greenDolls} alt="greenDolls" />
-                <span>USDⓢ</span>
-                <img src={drop} alt="drop" />
+            <span>Get</span>
+            <div className="flex  items-center text-14 w-full">
+              <div className="text-black font-[600]">
+                <select
+                  name="coins"
+                  // value={get}
+                  className="bg-transparent border-none "
+                >
+                  {data.map((item, index) => (
+                    <option key={index} value={item.value}>
+                      {item.name}
+                    </option>
+                  ))}
+                </select>
               </div>
-              <span className="text-[#FAC55A]">All</span>
+
+              <input type="number" className="bg-transparent border w-full " />
             </div>
           </div>
         </div>
-        <div className="text-[14px]">
-          <span>Available</span> <span className="text-[#FAC55A]">0USDⓢ</span>
+        <button
+          onClick={props.openModal}
+          className="bg-gradient-to-r from-[#EDD78F]  via-[#EDD78F] to-[#FDBF4A] rounded py-3 text-black"
+        >
+          Continue
+        </button>
+        <div className="text-[12px] text-center">
+          <span>1USDⓢ =0.0000438BTC 1BTC=22,813.14USDⓢ</span>{" "}
+          <span className="text-[#FDC04C]">3s</span>
         </div>
-      </div>
-      <hr className="border-[#3C3C3C]" />
-      <div className="bg-[#2C2C2C] p-6 w-full rounded">
-        <div className="flex flex-col gap-6 ">
-          <span>Get</span>
-          <div className="flex justify-between">
-            <div className="flex gap-5 pr-5 border-r border-[#3C3C3C]">
-              <img src={btc} alt="greenDolls" />
-              <span>USDⓢ</span>
-              <img src={drop} alt="drop" />
-            </div>
-            <span className="text-[#FAC55A]">All</span>
-          </div>
-        </div>
-      </div>
-      <button
-        onClick={props.openModal}
-        className="bg-gradient-to-r from-[#EDD78F] text-black via-[#EDD78F] to-[#FDBF4A] rounded py-3 text-black"
-      >
-        Continue
-      </button>
-      <div className="text-[12px] text-center">
-        <span>1USDⓢ =0.0000438BTC 1BTC=22,813.14USDⓢ</span>{" "}
-        <span className="text-[#FDC04C]">3s</span>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const TableData = (props) => {
   return (

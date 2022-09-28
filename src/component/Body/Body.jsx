@@ -11,6 +11,8 @@ import Trade from "../Trade/Trade";
 import { useSelector } from "react-redux";
 
 const Body = () => {
+  const loggedIn = useSelector((state) => state.login.loggedIn);
+
   return (
     <div className="bg-[#363636]  h-auto">
       <Routes>
@@ -18,11 +20,11 @@ const Body = () => {
         <Route path="settings" element={<Settings />} />
         <Route path="refferal" element={<Refferal />} />
         <Route path="earn" element={<Earn />} />
-        <Route path="login" element={<Login />} />
+        <Route path="login" element={loggedIn ? <Earn /> : <Login />} />
         <Route path="register" element={<Register />} />
         <Route path="invest" element={<Invest />} />
         <Route path="assets" element={<Assets />} />
-      <Route path="login" element={<Login />} />
+        <Route path="login" element={<Login />} />
       </Routes>
       {/* {useSelector((state) => state.login.loggedIn) ? (
      

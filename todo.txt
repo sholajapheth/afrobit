@@ -1,0 +1,6 @@
+change the blabah the header n nidex 
+fix register 
+finish drop down 
+    include coins 
+
+fix login route on login 

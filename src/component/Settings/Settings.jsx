@@ -31,6 +31,8 @@ import switcher from "../../assets/svgs/switcher.svg";
 import drop from "../../assets/svgs/drop.svg";
 import nextGold from "../../assets/svgs/nextGold.svg";
 
+// this is the topmost component in the settings page
+
 const Top = () => {
   return (
     <div className="bg-[#161616] md:px-[7rem] md:pt-[4rem] p-[1rem] text-white md:flex-row flex-col flex justify-between overflow-hidden">
@@ -57,8 +59,10 @@ const Top = () => {
     </div>
   );
 };
-// -----------////////////////////---------------
 
+// -----------////////////////////---------------
+//  this is a button component to render each button in the settgins page navigation
+// -----------////////////////////---------------
 const SettingsNavButton = ({
   image_1,
   image_2,
@@ -93,10 +97,12 @@ const SettingsNavButton = ({
       className={`${active && "text-white"} flex items-center gap-3 `}
     >
       <img className="w-[2rem]" src={active ? image_2 : image_1} alt={name} />
-      <p className="md:inline hidden">{name}</p>
+      <p className="md:inline hidden text-left">{name}</p>
     </button>
   );
 };
+
+// this is the settings navigation component
 
 const SettingsNav = ({ settingState, setSettingState, setComponent }) => {
   const navigate = useNavigate();
@@ -141,12 +147,15 @@ const SettingsNav = ({ settingState, setSettingState, setComponent }) => {
           image_2={reffer}
         /> */}
         <NavLink to={"refferal"}>
-        <button 
-        onclick={()=>{navigate("/refferal")}}
-         className={`flex items-center gap-3`}>
-          <img className="w-[2rem]" src={reffer} alt="Refferal" />
-          <p className="md:inline hidden">Refferal</p>
-        </button>
+          <button
+            onclick={() => {
+              navigate("/refferal");
+            }}
+            className={`flex items-center gap-3`}
+          >
+            <img className="w-[2rem]" src={reffer} alt="Refferal" />
+            <p className="md:inline hidden">Refferal</p>
+          </button>
         </NavLink>
 
         <SettingsNavButton
@@ -163,7 +172,7 @@ const SettingsNav = ({ settingState, setSettingState, setComponent }) => {
   );
 };
 
-// _______--------------------------__________________
+// this is the account settings component
 
 const AccountSettings = () => {
   return (
@@ -461,7 +470,6 @@ const GlobalSettings = () => {
     </div>
   );
 };
-
 
 const Coupon = () => {
   return (

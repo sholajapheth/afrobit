@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutAction } from "../../store/slices/login";
 import account from "../../assets/svgs/account.svg";
+import assets_icon from "../../assets/svgs/assets_icon.svg";
 
 const LoginRegister = () => {
   const dispatch = useDispatch();
@@ -13,7 +14,7 @@ const LoginRegister = () => {
   return (
     <div className="md:flex-row flex-col items-center flex gap-4 md:text-[15px] text-[12px]">
       {useSelector((state) => state.login.loggedIn) ? (
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 ">
           <button
             onClick={Logout}
             className="rounded-[3rem] md:px-[2.5rem] md:py-[8px] px-[1rem] py-[3px] border-[#EDD78F] text-[#EDD78F] border"
@@ -22,6 +23,9 @@ const LoginRegister = () => {
           </button>
           <NavLink to={"settings"}>
             <img src={account} alt="acct" />
+          </NavLink>
+          <NavLink to={"assets"}>
+            <img src={assets_icon} alt="acct" />
           </NavLink>
         </div>
       ) : (
