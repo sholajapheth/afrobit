@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import logo from "../../assets/svgs/logo.svg";
+import afrobit_logo from "../../assets/images/afrobit_logo.png";
 import LoginRegister from "./LoginRegister";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineClose } from "react-icons/ai";
@@ -20,7 +21,7 @@ const Header = () => {
     <div className="bg-[#211F20] px-[4rem] py-[1rem] flex items-center  text-white sticky top-0 w-full justify-between h-[6rem] z-[9999] ">
       {/* ----------logo-------------- */}
       <div>
-        <img className="min-w-[3rem] " src={logo} alt="logo" />
+        <img className="max-w-[5em] " src={afrobit_logo} alt="logo" />
       </div>
       {/* ----------Navigation-------------- */}
       <div className=" md:inline hidden ">
