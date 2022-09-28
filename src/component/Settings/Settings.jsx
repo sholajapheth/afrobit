@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import profile from "../../assets/svgs/profile.svg";
 import write from "../../assets/svgs/write.svg";
 import badge from "../../assets/svgs/badge.svg";
@@ -99,6 +99,7 @@ const SettingsNavButton = ({
 };
 
 const SettingsNav = ({ settingState, setSettingState, setComponent }) => {
+  const navigate = useNavigate();
   return (
     <div className="flex md:px-[3rem] px-[1rem] py-[4rem]   ">
       <div className="text-[#A7A7A7] font-[500] flex flex-col gap-[2rem] ">
@@ -140,11 +141,14 @@ const SettingsNav = ({ settingState, setSettingState, setComponent }) => {
           image_2={reffer}
         /> */}
         <NavLink to={"refferal"}>
-        <button className={`flex items-center gap-3`}>
+        <button 
+        onclick={()=>{navigate("/refferal")}}
+         className={`flex items-center gap-3`}>
           <img className="w-[2rem]" src={reffer} alt="Refferal" />
           <p className="md:inline hidden">Refferal</p>
         </button>
         </NavLink>
+
         <SettingsNavButton
           name="Coupon"
           settingState={settingState}

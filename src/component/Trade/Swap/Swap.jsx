@@ -178,8 +178,13 @@ const SwapHistory = () => {
                         <span>{item.to_currency}</span>
                       </span>
                     </TableData>
-                    <TableData>{item.amount_sent}</TableData>
-                    <TableData>{item.amount_get}</TableData>
+                    <TableData>
+                      {Math.round(item.amount_send * 100) / 100}
+                    </TableData>
+                    <TableData>
+                      {" "}
+                      {Math.round(item.amount_get * 100) / 100}
+                    </TableData>
                     <TableData>{item.rate} USDⓢ = 0.00004201 BTC </TableData>
                     <TableData>
                       <span
