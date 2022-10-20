@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext, createContext } from "react";
 import axios from "axios";
 import check from "../../../assets/svgs/check.svg";
 import coinswap from "../../../assets/svgs/coinswap.svg";
@@ -9,6 +9,11 @@ import eth from "../../../assets/images/eth.png";
 import usdt from "../../../assets/images/usdt.png";
 import bnb from "../../../assets/images/bnb.png";
 import { useSelector } from "react-redux";
+import { createSwapAction } from "../../../store/slices/createSwap";
+import { useDispatch } from "react-redux";
+
+
+const swap = createContext();
 
 const Check = (props) => (
   <div className="flex gap-2">
@@ -33,14 +38,29 @@ const Banner = () => (
   </div>
 );
 
-const Payment = (props) => {
- 
+const Payment = () => {
+
+  const {
+    openModal,
+    from,
+    to,
+    input,
+    output,
+    setOutput,
+    convert,
+    setTo,
+    setFrom,
+    setInput,
+  } = useContext(swap);
+
   const data = [
     { name: "USDⓢ", value: "usdt", img: usdt },
     { name: "BTC", value: "btc", img: btc },
     { name: "ETH", value: "eth", img: eth },
     { name: "BNB", value: "bnb", img: bnb },
   ];
+
+
 
   return (
     <div className="flex flex-col  items-center bg-[#211F20] py-[5rem] text-[18px] ">
@@ -51,18 +71,29 @@ const Payment = (props) => {
               <span>Send</span>
               <div className="flex  items-center text-14 w-full">
                 <div className="text-black font-[600]">
-                  <select name="coins" className="bg-transparent border-none ">
-                    <option value="USD">USDⓢ</option>
-                    <option value="BNB">BNB</option>
-                    <option value="USDT">USDT</option>
-                    <option value="TRC">TRC</option>
+                  <select
+                    onChange={(e) => {
+                      setFrom(e.target.value);
+                     
+                    }}
+                    value={from}
+                    name="coins"
+                    className="bg-transparent border-none "
+                  >
+                    {data.map((item, index) => (
+                      <option key={index} value={item.value}>
+                        {item.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
                 <div className="flex items-center gap-2 w-full">
                   <input
                     type="number"
+                    value={input}
                     className="bg-transparent border w-full "
+                    onChange={(e) => setInput(e.target.value)}
                   />
                   <span className="text-[14px]">All</span>
                 </div>
@@ -81,8 +112,12 @@ const Payment = (props) => {
             <div className="flex  items-center text-14 w-full">
               <div className="text-black font-[600]">
                 <select
+                  onChange={(e) => {
+                    setTo(e.target.value);
+                    console.log("value: ", e.target.value);
+                  }}
+                  value={to}
                   name="coins"
-                  // value={get}
                   className="bg-transparent border-none "
                 >
                   {data.map((item, index) => (
@@ -93,12 +128,25 @@ const Payment = (props) => {
                 </select>
               </div>
 
-              <input type="number" className="bg-transparent border w-full " />
+              <input
+                value={output.toFixed(2)}
+                type="number"
+                className="bg-transparent border w-full "
+                onChange={e=> setOutput(e.target.value)}
+              />
             </div>
           </div>
         </div>
         <button
-          onClick={props.openModal}
+        className="border w-full"
+          onClick={() => {
+            convert();
+          }}
+        >
+          Convert
+        </button>
+        <button
+          onClick={openModal}
           className="bg-gradient-to-r from-[#EDD78F]  via-[#EDD78F] to-[#FDBF4A] rounded py-3 text-black"
         >
           Continue
@@ -248,13 +296,24 @@ const SwapHistory = () => {
   );
 };
 
-const ReconfirmOrder = (props) => {
+const ReconfirmOrder = () => {
+  const dispatch = useDispatch();
+  const { closeModal, from, to, input, output } = useContext(swap);
+
+  const createSwap = ()=>{
+    console.log("create swap")
+     dispatch(createSwapAction(from, to, input));
+    // closeModal()
+  }
+
   return (
     <div className="m-auto items-center bg-[#222222] md:w-[60%] w-[90%] p-10 my-[20rem] ">
       <div className="flex flex-col gap-[2rem]">
         <div className="flex items-center justify-between">
           <span className="font-[700] text-[32px]">Reconfirm Order</span>
-          <button className="text-[30px]">×</button>
+          <button onClick={closeModal} className="text-[30px]">
+            ×
+          </button>
         </div>
         <div className="p-10 bg-[#2F2F2F] text-[20px]">
           <span className="text-[#848484]">
@@ -269,35 +328,41 @@ const ReconfirmOrder = (props) => {
         <div className="flex justify-between">
           <span className="text-[#7e7e7e] font-[700]">Quote</span>
           <div className="flex flex-col gap-1">
-            <span>1 USDⓢ ≈ 0.00004359 BTC</span>
-            <span className="text-[#707070]">1 BTC ≈ 22,936.59 USDⓢ</span>
+            <span>
+              {input} {from} ≈ {output} {to}
+            </span>
+            {/* <span className="text-[#707070]">1 BTC ≈ 22,936.59 USDⓢ</span> */}
           </div>
         </div>
         <div className="flex justify-between">
           <span className="text-[#7e7e7e] font-[700]">Send</span>
           <span>
-            <b>50 USDⓢ</b>
+            <b>
+              {input} {from}
+            </b>
           </span>
         </div>
         <hr className="border-[#3D3D3D]" />
         <div className="flex justify-between">
           <span className="text-[#7e7e7e] font-[700]">Get</span>
           <span>
-            <b>50 USDⓢ</b>
+            <b>
+              {output} {to}
+            </b>
           </span>
         </div>
 
         <div className="flex flex-col items-end">
           <div className=" md:flex-row flex-col items-center font-[600] flex gap-4 md:text-[15px] text-[12px]">
             <button
-              onClick={props.closeModal}
+              onClick={closeModal}
               className="rounded-[3rem] md:px-[2.5rem] md:py-[12px] px-[1rem] py-[5px] border-[#EDD78F] text-[#EDD78F] border"
             >
               Cancel
             </button>
 
             <button
-              onClick={props.closeModal}
+              onClick={createSwap}
               className="rounded-[3rem] md:px-[2.5rem] md:py-[12px] px-[1rem] py-[5px]  bg-gradient-to-r from-[#EDD78F] text-black via-[#EDD78F] to-[#FDBF4A]  shadow-lg shadow-[#EDD78F]/90 "
             >
               Confirm
@@ -313,17 +378,59 @@ const Swap = () => {
   const [modal, setModal] = useState(false);
   const openModal = () => setModal(true);
   const closeModal = () => setModal(false);
+  // Initializing all the state variables
+  const [info, setInfo] = useState([]);
+  const [input, setInput] = useState(0);
+  const [from, setFrom] = useState("usd");
+  const [to, setTo] = useState("usd");
+  // const [options, setOptions] = useState([]);
+  const [output, setOutput] = useState(0);
+
+  // Calling the api whenever the dependency changes
+  useEffect(() => {
+    axios
+      .get(
+        `https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${from}.json`
+      )
+      .then((res) => {
+        setInfo(res.data[from]);
+      });
+  }, [from]);
+
+  // Calling the convert function whenever
+  // a user switches the currency
+  // useEffect(() => {
+  //   setOptions(Object.keys(info));
+
+  //   convert();
+  // }, [info]);
+
+  // Function to convert the currency
+  function convert() {
+    var rate = info[to];
+    setOutput(input * rate);
+  }
+
+  // // Function to switch between two currency
+  // function flip() {
+  //   var temp = from;
+  //   setFrom(to);
+  //   setTo(temp);
+  // }
+
   return (
-    <div className="text-white">
-      {modal && (
-        <div className="absolute w-full  top-0 left-0 b backdrop-filter backdrop-blur-[3px] ">
-          <ReconfirmOrder closeModal={closeModal} openModal={openModal} />
-        </div>
-      )}
-      <Banner />
-      <Payment closeModal={closeModal} openModal={openModal} />
-      <SwapHistory />
-    </div>
+    <swap.Provider value={{ modal, openModal, closeModal, info, input, from, to, output, convert, setTo, setFrom, setInput }}>
+      <div className="text-white">
+        {modal && (
+          <div className="absolute w-full  top-0 left-0 b backdrop-filter backdrop-blur-[3px] ">
+            <ReconfirmOrder />
+          </div>
+        )}
+        <Banner />
+        <Payment />
+        <SwapHistory />
+      </div>
+    </swap.Provider>
   );
 };
 

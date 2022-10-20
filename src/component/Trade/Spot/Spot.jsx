@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Chart from "react-apexcharts";
 import { useTable } from "react-table";
 import exchange from "../../../assets/svgs/exchange.svg";
@@ -13,8 +13,27 @@ import greenDolls from "../../../assets/svgs/greenDolls.svg";
 import btc from "../../../assets/svgs/btc.svg";
 import slider from "../../../assets/svgs/slider.svg";
 import book from "../../../assets/svgs/book.svg";
+import { useDispatch } from "react-redux";
+import { create_spot_order_action } from "../../../store/slices/createSpotOrder";
+
 
 const Order = () => {
+  const [orderPrice, setOrderPrice] = useState();
+  const [amount, setAmount] = useState();
+  const dispatch = useDispatch();
+
+  const handleSpotOrder = () => {
+    console.log("Spot order");
+    const data = {
+      direction: "BUY",
+      price: orderPrice,
+      quantity: amount,
+      strategy: "FOK",
+      type: "LIMIT",
+      symbol: "BTC_USDT",
+    };
+    dispatch(create_spot_order_action(data));
+  };
   return (
     <div>
       <div className="flex justify-between text-white mb-[1rem]">
@@ -58,6 +77,8 @@ const Order = () => {
               className="bg-[#363636] w-full border-none h-[4rem]"
               type="text"
               placeholder="Enter order price"
+              value={orderPrice}
+              onChange={(e) => setOrderPrice(e.target.value)}
             />
           </div>
         </div>
@@ -68,8 +89,10 @@ const Order = () => {
               <img src={btc} alt="" />
               <input
                 className="bg-[#363636] w-full border-none h-[4rem] text-[12px]"
-                type="text"
+                type="number"
                 placeholder="Enter Amount"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
               />
             </div>
             <img src={exchange} alt="" />
@@ -77,7 +100,7 @@ const Order = () => {
               <img src={greenDolls} alt="" />
               <input
                 className="bg-[#363636] w-full border-none h-[4rem] text-[12px]"
-                type="text"
+                type="number"
                 placeholder="Enter order price"
               />
             </div>
@@ -99,6 +122,7 @@ const Order = () => {
         <button
           className="bg-gradient-to-r from-[#EDD78F] via-[#EDD78F] my-[15px] to-[#FDBF4A] text-black py-[10px] rounded-md font-[600] text-[16px] w-full"
           type="submit"
+          onClick={handleSpotOrder}
         >
           Buy
         </button>
