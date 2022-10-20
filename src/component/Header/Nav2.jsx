@@ -23,7 +23,7 @@ const Nav2 = (props) => {
             setDisplay(true);
           }}
         >
-          <div className="flex flex-col gap-[1px] items-center gap-3">
+          <div className="flex flex-col  items-center gap-3">
             <span>Trade</span>
             {active === "trade" && (
               <span className="border-b-[2px]  border-[#FAC55B] w-[25px]"></span>
@@ -32,7 +32,7 @@ const Nav2 = (props) => {
         </button>
         {active === "trade" && display && (
           <div className="py-8 rounded bg-[#2C2C2C] top-[5rem] flex flex-col gap-8">
-            <NavLink to={"trade/swap"}>
+            <NavLink to={"/trade/swap"}>
               <button
                 onClick={() => {
                   setDisplay(false);
@@ -49,7 +49,7 @@ const Nav2 = (props) => {
                 </div>
               </button>
             </NavLink>
-            <NavLink to={"trade/spot"}>
+            <NavLink to={"/trade/spot"}>
               <button
                 onClick={() => {
                   setDisplay(false);
@@ -66,7 +66,7 @@ const Nav2 = (props) => {
                 </div>
               </button>
             </NavLink>
-            <NavLink to={"trade/margin"}>
+            <NavLink to={"/trade/margin"}>
               <button
                 onClick={() => {
                   setDisplay(false);
