@@ -11,6 +11,7 @@ import bnb from "../../../assets/images/bnb.png";
 import { useSelector } from "react-redux";
 import { createSwapAction } from "../../../store/slices/createSwap";
 import { useDispatch } from "react-redux";
+import { TableData } from "../../../Globals/smallFns";
 
 
 const swap = createContext();
@@ -160,13 +161,6 @@ const Payment = () => {
   );
 };
 
-const TableData = (props) => {
-  return (
-    <td className="md:p-5 md:px-8 p-2 px-2  text-white text-[14px]">
-      {props.children}
-    </td>
-  );
-};
 
 const SwapHistory = () => {
   const [swap_history, setSwap_history] = useState([]);

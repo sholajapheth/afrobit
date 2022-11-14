@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import OpenOrdersComp from "./OpenOrdersComp";
 import Chart from "react-apexcharts";
-import { useTable } from "react-table";
 import exchange from "../../../assets/svgs/exchange.svg";
 import play from "../../../assets/svgs/play.svg";
 import play2 from "../../../assets/svgs/play2.svg";
@@ -15,7 +15,7 @@ import slider from "../../../assets/svgs/slider.svg";
 import book from "../../../assets/svgs/book.svg";
 import { useDispatch } from "react-redux";
 import { create_spot_order_action } from "../../../store/slices/createSpotOrder";
-
+import OrdersComp from "./OrdersComp";
 
 const Order = () => {
   const [orderPrice, setOrderPrice] = useState();
@@ -543,93 +543,47 @@ const CandleStick = () => {
 };
 
 const OpenOrders = () => {
-  const data = React.useMemo(
-    () => [
-      {
-        col1: "",
-        col2: "",
-        col3: "",
-        col4: "",
-        col5: "",
-        col6: "",
-        col7: "",
-        col8: "",
-        col9: "",
-        col10: "",
-      },
-    ],
-    []
-  );
-
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: "Order Time",
-        accessor: "col1", // accessor is the "key" in the data
-      },
-      {
-        Header: "Trading Pair",
-        accessor: "col2",
-      },
-      {
-        Header: (
-          <div className="flex gap-1 items-center">
-            <span>Transaction Type</span>
-            <img className="max-h-[5px] w-[18px]" src={drop2} alt="" />
-          </div>
-        ),
-        accessor: "col3",
-      },
-      {
-        Header: (
-          <div className="flex gap-1 items-center">
-            <span>Direction</span>
-            <img className="max-h-[5px] w-[18px]" src={drop2} alt="" />
-          </div>
-        ),
-        accessor: "col4",
-      },
-      {
-        Header: "Order Price",
-        accessor: "col5",
-      },
-      {
-        Header: "Amount",
-        accessor: "col6",
-      },
-      {
-        Header: "Progress",
-        accessor: "col7",
-      },
-      {
-        Header: "Trigger Price",
-        accessor: "col8",
-      },
-      {
-        Header: "Order status",
-        accessor: "col9",
-      },
-      {
-        Header: <span className="font-[500] text-[#FAC55B]">Cancel All</span>,
-        accessor: "col10",
-      },
-    ],
-    []
-  );
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data });
+  const [orderActive, setOrderActive] = useState("Open Orders");
 
   return (
     <div className="text-[#7C7C7C] flex flex-col gap-8">
       <div className="flex items-center justify-between px-[10px]">
         <div className="font-[500] text-[20px] flex gap-[25px] items-center">
-          <div className="flex flex-col gap-[.5px] items-center font-[700] ">
-            <span className="text-[#FAC55B] ">Open Orders(0)</span>
-            <span className="border-b-[3px]  border-[#FAC55B] w-[60px]"></span>
-          </div>
-          <span>Orders</span>
-          <span>Transaction Records</span>
+          <button
+            onClick={() => {
+              setOrderActive("Open Orders");
+            }}
+            className="flex flex-col gap-[.5px] items-center font-[700] "
+          >
+            <span className={` text-[#FAC55B] `}>
+              Open Orders
+            </span>
+            {orderActive === "Open Orders" && (
+              <span className="border-b-[3px]  border-[#FAC55B] w-[60px]"></span>
+            )}
+          </button>
+          {/* <button
+            onClick={() => {
+              setOrderActive("Orders");
+            }}
+            className="flex flex-col gap-[.5px] items-center font-[700] "
+          >
+            <span className={`text-[#7C7C7C]`}>Orders</span>
+            {orderActive === "Orders" && (
+              <span className="border-b-[3px]  border-[#FAC55B] w-[60px]"></span>
+            )}
+          </button>
+          <button
+            onClick={() => {
+              setOrderActive("transx");
+            }}
+            className="flex flex-col gap-[.5px] items-center font-[700] "
+          >
+            <span className={`text-[#7C7C7C]`}>Transction Records</span>
+            {orderActive === "transx" && (
+              <span className="border-b-[3px]  border-[#FAC55B] w-[60px]"></span>
+            )}
+          </button> */}
         </div>
         <div className="flex gap-2 items-center">
           <span className="text-[15px]">Hide other trading pairs</span>
@@ -641,41 +595,9 @@ const OpenOrders = () => {
       </div>
 
       <div className="flex flex-col md:text-[12px] text-[10px] text-black md:h-screen  md:overflow-auto overflow-y-scroll ">
-        <table {...getTableProps()} className="w-full ">
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()} className="p-5 ">
-                {headerGroup.headers.map((column) => (
-                  <th
-                    {...column.getHeaderProps()}
-                    className="text-left text-[#666666] bg-[#242424] md:p-5 md:px-8 p-2 px-2 "
-                  >
-                    {column.render("Header")}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td
-                        {...cell.getCellProps()}
-                        className="md:p-5 md:px-8 p-2 px-2  text-white"
-                      >
-                        {cell.render("Cell")}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        {orderActive === "Open Orders" && <OpenOrdersComp />}
+        {orderActive === "Orders" && <OrdersComp />}
+        {orderActive === "transx " && <OrdersComp />}
       </div>
 
       <div className="flex flex-col m-auto">

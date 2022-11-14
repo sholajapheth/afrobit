@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 import { useTable } from "react-table";
 import wallet from "../../assets/svgs/wallet.svg";
 import wallet2 from "../../assets/svgs/wallet2.svg";
@@ -11,6 +11,12 @@ import btc from "../../assets/svgs/btc.svg";
 import barcode from "../../assets/svgs/barcode.svg";
 import copy from "../../assets/svgs/copy.svg";
 import to from "../../assets/svgs/to.svg";
+import { TableData } from "../../Globals/smallFns";
+import { getEndpoint } from "../../Globals/get";
+
+const AssetsContext = createContext({});
+
+
 
 const AssetsNavButton = ({
   name,
@@ -140,94 +146,53 @@ const Commision = () => {
 
 // ----------------------------------------
 const Commision2 = () => {
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: "Currency",
-        accessor: "col1", // accessor is the "key" in the data
-      },
-      {
-        Header: "Total Balance",
-        accessor: "col2",
-      },
-      {
-        Header: "Avbl",
-        accessor: "col3",
-      },
-      {
-        Header: "Flexible rate",
-        accessor: "col4",
-      },
-      {
-        Header: "Action",
-        accessor: "col5",
-      },
-    ],
-    []
-  );
-  const data = React.useMemo(
-    () => [
-      {
-        col1: (
-          <div className="flex gap-1">
-            <img src={btc} alt="" />
-            <span>BTC</span>
-          </div>
-        ),
-        col2: "11.46600236 ≈ 2,095,172.54",
-        col3: "1,006.12784383",
-        col4: "1.37%",
-        col5: (
-          <div className="flex gap-6 text-[#EDD78F]">
-            <button className="px-[1.5rem] border rounded border-[#EDD78F] py-[.2rem]">
-              Depost
-            </button>
-            <button className="px-[1.5rem] border rounded border-[#EDD78F] py-[.2rem]">
-              Withraw
-            </button>
-          </div>
-        ),
-      },
-    ],
-    []
-  );
-
-  const { getTableProps, getTableBodyProps, prepareRow, rows, headerGroups } =
-    useTable({ columns, data });
+  const { asset_details } = useContext(AssetsContext);
 
   return (
     <div className=" text-white mb-[4rem]">
       <div className="mt-[2rem]">
-        <table {...getTableProps()} className="w-full ">
+        <table className="w-full ">
           <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()} className="p-5 ">
-                {headerGroup.headers.map((column) => (
-                  <th
-                    {...column.getHeaderProps()}
-                    className="text-left text-[#666666] bg-[#242424] md:p-5 md:px-8 p-2 px-2 "
-                  >
-                    {column.render("Header")}
-                  </th>
-                ))}
-              </tr>
-            ))}
+            <tr className="p-5 ">
+              <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+                Currency
+              </th>
+              <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+                Total Balance
+              </th>
+              <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+                Avbl
+              </th>
+              <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+                Flexible Rate
+              </th>
+              <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+                Action
+              </th>
+            </tr>
           </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
+
+          <tbody>
+            {asset_details?.balance_details.map((item) => {
+              // const date1 = new Date(item.created_at);
+              // const date = date1.toLocaleString();
+
               return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td
-                        {...cell.getCellProps()}
-                        className="md:p-4 md:px-8 p-2 px-2  text-white"
-                      >
-                        {cell.render("Cell")}
-                      </td>
-                    );
-                  })}
+                <tr>
+                  <TableData>{item.currency}</TableData>
+                  <TableData>{item.balance}</TableData>
+                  <TableData>{item.available_balance}</TableData>
+                  <TableData>0%</TableData>
+                  <TableData>
+                    <div className="flex gap-6 text-[#EDD78F]">
+                      <button className="px-[1.5rem] border rounded border-[#EDD78F] py-[.2rem]">
+                        Depost
+                      </button>
+                      <button className="px-[1.5rem] border rounded border-[#EDD78F] py-[.2rem]">
+                        Withraw
+                      </button>
+                    </div>
+                  </TableData>
                 </tr>
               );
             })}
@@ -240,59 +205,18 @@ const Commision2 = () => {
 
 // ------------------------------------------------------
 const Commision3 = () => {
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: "Creation Time",
-        accessor: "col1", // accessor is the "key" in the data
-      },
-      {
-        Header: "Currency",
-        accessor: "col2",
-      },
-      {
-        Header: "Amount",
-        accessor: "col3",
-      },
-      {
-        Header: "Status",
-        accessor: "col4",
-      },
-      {
-        Header: "Details",
-        accessor: "col5",
-      },
-    ],
-    []
-  );
-  const data = React.useMemo(
-    () => [
-      {
-        col1: (
-          <div className="flex gap-1">
-            <img src={btc} alt="" />
-            <span>BTC</span>
-          </div>
-        ),
-        col2: "11.46600236 ≈ 2,095,172.54",
-        col3: "1,006.12784383",
-        col4: "1.37%",
-        col5: (
-          <div className="flex gap-6 text-[#EDD78F]">
-            <button className="px-[1.5rem] border rounded border-[#EDD78F] py-[.2rem]">
-              Depost
-            </button>
-            <button className="px-[1.5rem] border rounded border-[#EDD78F] py-[.2rem]">
-              Withraw
-            </button>
-          </div>
-        ),
-      },
-    ],
-    []
-  );
+  const [deposit, setDeposit] = useState();
 
-  const { getTableProps, headerGroups } = useTable({ columns, data });
+  useEffect(() => {
+    async function fetchData() {
+      const result = await getEndpoint("wallet/deposits");
+
+      setDeposit(result.data);
+      // console.log(result.data);
+    }
+    fetchData();
+  }, [setDeposit]);
+
 
   return (
     <div className=" text-white my-[4rem] text-[12px]">
@@ -324,40 +248,145 @@ const Commision3 = () => {
         </select>
       </div>
       <div className="mt-[2rem]">
-        <table {...getTableProps()} className="w-full ">
+        <table className="w-full ">
           <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()} className="p-5 ">
-                {headerGroup.headers.map((column) => (
-                  <th
-                    {...column.getHeaderProps()}
-                    className="text-left text-[#666666] bg-[#242424] md:p-5 md:px-8 p-2 px-2 "
-                  >
-                    {column.render("Header")}
-                  </th>
-                ))}
-              </tr>
-            ))}
+            <tr className="p-5 ">
+              <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+                Creation Time
+              </th>
+              <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+                Currency
+              </th>
+              <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+                Amount
+              </th>
+              <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+                Status
+              </th>
+              <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+                Details
+              </th>
+            </tr>
           </thead>
-          {/* <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
+          <tbody>
+            {deposit?.items.map((item) => {
+              // const date1 = new Date(item.created_at);
+              // const date = date1.toLocaleString();
+
               return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td
-                        {...cell.getCellProps()}
-                        className="md:p-4 md:px-8 p-2 px-2  text-white"
-                      >
-                        {cell.render("Cell")}
-                      </td>
-                    );
-                  })}
+                <tr>
+                  <TableData></TableData>
+                  <TableData></TableData>
+                  <TableData></TableData>
+                  <TableData></TableData>
+                  <TableData>
+                    <div className="flex gap-6 text-[#EDD78F]">
+                      <button className="px-[1.5rem] border rounded border-[#EDD78F] py-[.2rem]">
+                        Depost
+                      </button>
+                      <button className="px-[1.5rem] border rounded border-[#EDD78F] py-[.2rem]">
+                        Withraw
+                      </button>
+                    </div>
+                  </TableData>
                 </tr>
               );
             })}
-          </tbody> */}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+const Commision4 = () => {
+  const [withdraw, setWithdraw] = useState();
+
+  useEffect(() => {
+    async function fetchData() {
+      const result = await getEndpoint("wallet/withdrawals");
+
+      setWithdraw(result.data);
+      // console.log(result.data);
+    }
+    fetchData();
+  }, [setWithdraw]);
+
+
+  return (
+    <div className=" text-white my-[4rem] text-[12px]">
+      <p className="font-[700] mb-[.5rem]">Deposit History</p>
+      <hr />
+      <div className="flex gap-4  text-[#707070] mt-[1rem]">
+        <button className="px-[1.5rem] border border-[#707070] py-[.3rem] rounded">
+          Crypto deposit
+        </button>
+        <button className="px-[1.5rem] border border-[#707070] py-[.3rem] rounded">
+          Bank Transfer
+        </button>
+        <button className="px-[1.5rem] border border-[#707070] py-[.3rem] rounded">
+          Crypto Transfer
+        </button>
+
+        <button className="bg-[#363636] flex items-center gap-3 px-[.3rem] border border-[#707070] py-[.3rem] rounded">
+          <span>Select Date</span>
+          <img src={to} alt="" />
+          <span>End Date</span>
+        </button>
+
+        <select
+          name=""
+          id=""
+          className=" bg-[#363636] border border-[#707070]  rounded"
+        >
+          <option value="">All</option>
+        </select>
+      </div>
+      <div className="mt-[2rem]">
+        <table className="w-full ">
+          <thead>
+            <tr className="p-5 ">
+              <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+                Creation Time
+              </th>
+              <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+                Currency
+              </th>
+              <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+                Amount
+              </th>
+              <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+                Status
+              </th>
+              <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+                Details
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {withdraw?.items.map((item) => {
+              // const date1 = new Date(item.created_at);
+              // const date = date1.toLocaleString();
+
+              return (
+                <tr>
+                  <TableData></TableData>
+                  <TableData></TableData>
+                  <TableData></TableData>
+                  <TableData></TableData>
+                  <TableData>
+                    <div className="flex gap-6 text-[#EDD78F]">
+                      <button className="px-[1.5rem] border rounded border-[#EDD78F] py-[.2rem]">
+                        Depost
+                      </button>
+                      <button className="px-[1.5rem] border rounded border-[#EDD78F] py-[.2rem]">
+                        Withraw
+                      </button>
+                    </div>
+                  </TableData>
+                </tr>
+              );
+            })}
+          </tbody>
         </table>
       </div>
     </div>
@@ -366,122 +395,34 @@ const Commision3 = () => {
 
 // -----------------------------------------------
 
-const Commision4 = () => {
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: "Creation Time",
-        accessor: "col1", // accessor is the "key" in the data
-      },
-      {
-        Header: "Currency",
-        accessor: "col2",
-      },
-      {
-        Header: "Amount",
-        accessor: "col3",
-      },
-      {
-        Header: "Status",
-        accessor: "col4",
-      },
-      {
-        Header: "Details",
-        accessor: "col5",
-      },
-    ],
-    []
-  );
-  const data = React.useMemo(
-    () => [
-      {
-        col1: (
-          <div className="flex gap-1">
-            <img src={btc} alt="" />
-            <span>BTC</span>
-          </div>
-        ),
-        col2: "11.46600236 ≈ 2,095,172.54",
-        col3: "1,006.12784383",
-        col4: "1.37%",
-        col5: (
-          <div className="flex gap-6 text-[#EDD78F]">
-            <button className="px-[1.5rem] border rounded border-[#EDD78F] py-[.2rem]">
-              Depost
-            </button>
-            <button className="px-[1.5rem] border rounded border-[#EDD78F] py-[.2rem]">
-              Withraw
-            </button>
-          </div>
-        ),
-      },
-    ],
-    []
-  );
 
-  const { getTableProps, headerGroups } = useTable({ columns, data });
-
-  return (
-    <div className=" text-white my-[4rem]">
-      <p className="font-[700] mb-[.5rem]">Transfer History</p>
-      <hr />
-      <div className="flex gap-4  text-[#707070] mt-[1rem]">
-        <button className="px-[1.5rem] border border-[#707070] py-[.3rem] rounded">
-          WhaleFin Internal Transfer
-        </button>
-        <button className="px-[1.5rem] border border-[#707070] py-[.3rem] rounded">
-          Address Transfer
-        </button>
-        <button className="px-[1.5rem] border border-[#707070] py-[.3rem] rounded">
-          Bank Transfer
-        </button>
-
-        <button className="bg-[#363636] flex items-center gap-3 px-[.3rem] border border-[#707070] py-[.3rem] rounded">
-          <span>Select Date</span>
-          <img src={to} alt="" />
-          <span>End Date</span>
-        </button>
-        <button className=" bg-[#363636] flex items-center gap-8 px-[.3rem] border border-[#707070] py-[.3rem] rounded">
-          <span>Select Currency</span>
-          <img src={drop} alt="" />
-        </button>
-      </div>
-      <div className="mt-[2rem]">
-        <table {...getTableProps()} className="w-full ">
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()} className="p-5 ">
-                {headerGroup.headers.map((column) => (
-                  <th
-                    {...column.getHeaderProps()}
-                    className="text-left text-[#666666] bg-[#242424] md:p-5 md:px-8 p-2 px-2 "
-                  >
-                    {column.render("Header")}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-        </table>
-      </div>
-    </div>
-  );
-};
 
 const Wallet = () => {
+  const { asset_details, set_asset_details } = useContext(AssetsContext);
+
+  useEffect(() => {
+    async function fetchData() {
+      const result = await getEndpoint("asset/balance");
+
+      set_asset_details(result.data);
+      console.log(result.data);
+    }
+    fetchData();
+  }, [set_asset_details]);
+
   return (
     <div className="flex flex-col gap-[2rem]  ">
       <div className="flex gap-[8rem]">
         <div>
           <p className="text-[#858585] text-[12px]">Net assets (USD)</p>
           <p className="font-[500] text-[20px] md:text-[28px]">
-            ≈ 2,095,172.54
+            ≈ {asset_details?.available_balance}
           </p>
         </div>
         <div>
           <p className="text-[#858585] text-[12px]">Available (USD)</p>
           <p className="font-[500] text-[20px] md:text-[28px]">
-            ≈ 2,095,172.54
+            ≈ {asset_details?.available_balance}
           </p>
         </div>
       </div>
@@ -500,7 +441,7 @@ const Wallet = () => {
           <div>
             <p className="text-[#858585] text-[12px]">Available (USD)</p>
             <p className="font-[500] text-[20px] md:text-[28px]">
-              ≈ 2,095,172.54
+              ≈ {asset_details?.available_balance}
             </p>
           </div>
           <div className="flex gap-[1rem]">
@@ -781,6 +722,7 @@ const Displayarea = (props) => {
 };
 
 const Assets = () => {
+  const [asset_details, set_asset_details] = useState();
   const [assetState, setAssetState] = useState("Wallet");
   const [component, setComponent] = useState(<Wallet />);
   return (
@@ -789,8 +731,11 @@ const Assets = () => {
         assetState={assetState}
         setAssetState={setAssetState}
         setComponent={setComponent}
+        b
       />
-      <Displayarea assetState={assetState} component={component} />
+      <AssetsContext.Provider value={{ asset_details, set_asset_details }}>
+        <Displayarea assetState={assetState} component={component} />
+      </AssetsContext.Provider>
     </div>
   );
 };

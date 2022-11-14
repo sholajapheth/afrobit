@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useTable } from "react-table";
+import React, { useState, useEffect } from "react";
+
 import ethPocket from "../../assets/svgs/ethPocket.svg";
 import eye from "../../assets/svgs/eye.svg";
 import drop from "../../assets/svgs/drop.svg";
@@ -8,39 +8,10 @@ import switcher from "../../assets/svgs/switch.svg";
 import btc from "../../assets/svgs/btc.svg";
 import moneyWings from "../../assets/svgs/moneyWings.svg";
 import tri2 from "../../assets/svgs/tri2.svg";
+import { getEndpoint } from "../../Globals/get";
+import { TableData } from "../../Globals/smallFns";
 
-const tableData = [
-  {
-    col1: "Fixed Earn - USDⓢ",
-    col2: "5.5%",
-    col3: "60Days",
-  },
-  {
-    col1: "Fixed Earn - USDT",
-    col2: "5.0%",
-    col3: "20Days",
-  },
-  {
-    col1: "Fixed Earn - ETH",
-    col2: "4.2%",
-    col3: "10Days",
-  },
-  {
-    col1: "Fixed Earn - BTC",
-    col2: "4.2%",
-    col3: "10Days",
-  },
-  {
-    col1: "Fixed Earn - SOL",
-    col2: "4.5%",
-    col3: "5Days",
-  },
-  {
-    col1: "Fixed Earn - ADA",
-    col2: "4.8%",
-    col3: "10Days",
-  },
-];
+
 
 const Top = () => {
   return (
@@ -107,57 +78,20 @@ const Middle = () => {
 };
 
 const Bottom = ({ setModal }) => {
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: "Name",
-        accessor: "col1", // accessor is the "key" in the data
-      },
-      {
-        Header: (
-          <div className="flex gap-2 items-center">
-            <span>APR</span>
-            <img src={tri2} className="w-[10px]" alt="" />
-          </div>
-        ),
-        accessor: "col2",
-      },
-      {
-        Header: (
-          <div className="flex gap-2 items-center">
-            <span>Tenor</span>
-            <img src={tri2} className="w-[10px]" alt="" />
-          </div>
-        ),
-        accessor: "col3",
-      },
-    ],
-    []
-  );
+const [earn, setEarn] = useState()
 
-  const data = React.useMemo(
-    () =>
-      tableData.map((item) => ({
-        col1: item.col1,
-        col2: <span className="text-[#EDD78F] ">{item.col2}</span>,
-        col3: (
-          <div className="flex items-center justify-between">
-            <span>{item.col3}</span>
+useEffect(() => {
+  async function fetchData() {
+    const result = await getEndpoint("earn/orders");
 
-            <button
-              onClick={() => setModal(true)}
-              className="rounded-full px-6 py-2  text-[#EDD78F] border border-[#EDD78F]"
-            >
-              Suscribe
-            </button>
-          </div>
-        ),
-      })),
-    [setModal]
-  );
+    setEarn(result.data);
+    // console.log(result.data);
+  }
+  fetchData();
+}, [setEarn]);
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data });
+
+
   return (
     <div className="">
       <div className="flex flex-col gap-6 bg-[#161616] md:p-[4rem] p-[1rem] md:text-[14px] text-[12px] text-black md:h-screen  md:overflow-auto overflow-y-scroll ">
@@ -170,39 +104,34 @@ const Bottom = ({ setModal }) => {
         </div>
 
         {/* --------------- */}
-        <table {...getTableProps()} className="w-full ">
+        <table className="w-full ">
           <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()} className="p-5 ">
-                {headerGroup.headers.map((column) => (
-                  <th
-                    {...column.getHeaderProps()}
-                    className="text-left text-[#666666] bg-[#242424] md:p-5 md:px-8 p-2 px-2 "
-                  >
-                    {column.render("Header")}
-                  </th>
-                ))}
+            <tr className="p-5 ">
+              <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+                Name
+              </th>
+              <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+                <div className="flex gap-2 items-center">
+                  <span>APR</span>
+                  <img src={tri2} className="w-[10px]" alt="" />
+                </div>
+              </th>
+              <th className="text-left text-[#666666] bg-[#242424] md:p-3 md:px-6 p-2 px-2 ">
+                <div className="flex gap-2 items-center">
+                  <span>Tenor</span>
+                  <img src={tri2} className="w-[10px]" alt="" />
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {earn?.items.map((item) => (
+              <tr>
+                <TableData>{item.total}</TableData>
+                <TableData>{item.next}</TableData>
+                <TableData>{item.previous}</TableData>
               </tr>
             ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td
-                        {...cell.getCellProps()}
-                        className="md:p-4 md:px-8 p-2 px-2  text-white"
-                      >
-                        {cell.render("Cell")}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
           </tbody>
         </table>
       </div>
